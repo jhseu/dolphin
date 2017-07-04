@@ -7,6 +7,8 @@
 #include <memory>
 #include <sstream>
 #include <unistd.h>
+#include <algorithm>
+#include <iomanip>
 
 #include "Common/FileUtil.h"
 #include "Core/CoreTiming.h"
@@ -132,7 +134,11 @@ u32 MemoryWatcher::ChasePointer(const std::string& line)
 {
   u32 value = 0;
   for (u32 offset : m_addresses[line])
-    value = Memory::Read_U32(value + offset);
+  {
+    value = Common::swap32(value);
+    if (!Memory::CopyFromEmu(&value, value + offset, sizeof(value), false))
+      return 0;
+  }
   return value;
 }
 
