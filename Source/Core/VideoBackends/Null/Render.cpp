@@ -9,6 +9,7 @@
 
 #include "VideoCommon/AbstractPipeline.h"
 #include "VideoCommon/AbstractShader.h"
+#include "VideoCommon/TextureCacheBase.h"
 #include "VideoCommon/VideoConfig.h"
 
 namespace Null
@@ -94,6 +95,7 @@ TargetRectangle Renderer::ConvertEFBRectangle(const EFBRectangle& rc)
 
 void Renderer::SwapImpl(AbstractTexture*, const EFBRectangle&, u64)
 {
+  g_texture_cache->Cleanup(frameCount);
   UpdateActiveConfig();
 }
 
